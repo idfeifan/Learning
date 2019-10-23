@@ -5,8 +5,8 @@ class Settings():
         '''初始化游戏的设置'''
 
         #设置屏幕
-        self.screen_width = 700
-        self.screen_height = 1000
+        self.screen_width = 790
+        self.screen_height = 700
         self.bg_color = (230,230,230)
         self.ship_speed_factor = 1.5
 
@@ -17,3 +17,6 @@ class Settings():
         self.bullet_color = 60,60,60
 
         self.bullet_allowed = 3
+
+        # 外星人设置
+        self.alien_speed_factor = 0.3
