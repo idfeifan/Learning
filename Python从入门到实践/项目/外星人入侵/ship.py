@@ -11,7 +11,7 @@ class Ship(Sprite):
         self.ai_settings = ai_settings
         #加载飞船图像并获取其外接矩形
         #返回surface对象
-        self.image = pygame.image.load('E:\Pwork\Learning\Python从入门到实践\项目\外星人入侵\image\ship.bmp')
+        self.image = pygame.image.load(r'D:\IdeaProject\Learning\Python从入门到实践\项目\外星人入侵\image\ship.bmp')
         self.rect = self.image.get_rect() #获取surface的rect属性 理解为图片的矩形
         self.screen_rect = screen.get_rect() # 获取背景的rect矩形
 

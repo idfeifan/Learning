@@ -4,7 +4,6 @@ import pygame
 from pygame.sprite import Group
 from Python从入门到实践.项目.外星人入侵.settings import Settings
 from Python从入门到实践.项目.外星人入侵.ship import Ship
-from Python从入门到实践.项目.外星人入侵.bullet import Bullet
 import Python从入门到实践.项目.外星人入侵.game_functions as gf
 from Python从入门到实践.项目.外星人入侵.game_stats import GameStats
 from Python从入门到实践.项目.外星人入侵.button import Button
