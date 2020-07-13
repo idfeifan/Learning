@@ -44,9 +44,8 @@ def temp(file_name):
         os.remove(file_name)
     df.to_excel(file_name,sheet_name='技术规则',index=False,header=True)
 #电话sql修改，正则匹配错误脚本，并进行替换
-def PhoneSubstr():
-    path = r"C:\Users\35807\Desktop\result-0712.xlsx"
-    df= pd.read_excel(path,sheet_name='Sheet1')
+def PhoneSubstr(path):
+    df= pd.read_excel(path,sheet_name='技术规则')
     l = list()
     print(df.loc[0,'Index_class'])
     for idx in df.index:
@@ -82,11 +81,12 @@ def PhoneSubstr2(path):
             task_id = df.loc[idx,'task_id']
             strinfo = re.compile(r'''case when (.*?) REGEXP "\^\(\(13\[0-9]\)\|\(147\)\|\(15\[0-9]\)\|\(166\)\|\(173\)\|\(17\[5-8]\)\|\(18\[0-9\]\|\(19\[0-9\]\)\)\)\\d\{8\}\$" =FALSE''')
             columns= strinfo.findall(Fault_condition)
-            if columns:
+            print(columns)
+            if list(columns)==0:
                 print("task_id:" + task_id + ", 此任务脚本有问题，字段未提取出来")
             else:
                 source = r'case when ' + columns[0] + r''' REGEXP "\^\(\(13\[0-9]\)\|\(147\)\|\(15\[0-9]\)\|\(166\)\|\(173\)\|\(17\[5-8]\)\|\(18\[0-9]|\(19\[0-9]\)\)\)\\d\{8}$" =FALSE'''
-                target = 'case when translate(nvl(a.' + columns[0] + ",''),'0123456789','') <>''"
+                target = 'case when translate(nvl(' + columns[0] + ",''),'0123456789','') <>''"
                 pat = re.search(source,Fault_condition)
                 print(pat)
                 if pat == None:
@@ -95,8 +95,8 @@ def PhoneSubstr2(path):
                 df.loc[idx,'Fault_condition'] = result_Fault_condition
 
 
-                strinfo2 = re.compile(r'''case when (.*?) REGEXP "\^\(\(13\[0-9]\)\|\(147\)\|\(15\[0-9]\)\|\(166\)\|\(173\)\|\(17\[5-8]\)\|\(18\[0-9\]\|\(19\[0-9\]\)\)\)\\d\{8\}\$" =FALSE''')
-                target = 'case when translate(nvl(a.' + columns[0] + ",''),'0123456789','') <>''"
+                strinfo2 = re.compile(r'''case when (.*?) REGEXP "\^\(\(13\[0-9\]\)\|\(147\)\|\(15\[0-9\]\)\|\(166\)\|\(173\)\|\(17\[5-8\]\)\|\(18\[0-9]\)\|\(19\[0-9\]\)\)\\d\{8\}\$" =FALSE''')
+                target = 'case when translate(nvl(' + columns[0] + ",''),'0123456789','') <>''"
                 b_1 = strinfo2.sub(target,Fault_sql)
                 df.loc[idx,'Fault_sql'] = b_1
 
@@ -132,13 +132,42 @@ def pk_check():
     if os.path.exists(file_name):
         os.remove(file_name)
     df.to_excel(file_name,sheet_name='技术规则',index=False,header=True)
-
+def time_check(path):
+    df= pd.read_excel(path,sheet_name='时间格式检测')
+    print(df.loc[0,'指标分类*'])
+    for idx in df.index:
+        db = df.loc[idx,'数据库名*']
+        table = df.loc[idx,'表名*']
+        column = df.loc[idx,'字段名称*']
+        if df.loc[idx,'指标分类*']=='有效检查性':
+            df.loc[idx,'文本错误条件'] = r'select * from '+r'('+ r"select *,REPORT_TIME regexp "+"""'([\d]{4}(((0[13578]|1[02])((0[1-9])|([12][0-9])|(3[01])))|(((0[469])|11)((0[1-9])|([12][1-9])|30))|(02((0[1-9])|(1[0-9])|(2[1-8])))))|((((([02468][048])|([13579][26]))00)|([0-9]{2}(([02468][048])|([13579][26]))))(((0[13578]|1[02])((0[1-9])|([12][0-9])|(3[01])))|(((0[469])|11)((0[1-9])|([12][1-9])|30))|(02((0[1-9])|(1[0-9])|(2[1-9])))))'  """ + column+ ' from ' + str(db) + '.' + str(table) + ') a  where a.' + str(column) + '=false'
+            df.loc[idx,'全量SQL'] = 'select count(1) from '+db+'.'+table
+            df.loc[idx,'错误SQL'] =r'select count(1) from '+r'('+ r"select *,REPORT_TIME regexp "+"""'([\d]{4}(((0[13578]|1[02])((0[1-9])|([12][0-9])|(3[01])))|(((0[469])|11)((0[1-9])|([12][1-9])|30))|(02((0[1-9])|(1[0-9])|(2[1-8])))))|((((([02468][048])|([13579][26]))00)|([0-9]{2}(([02468][048])|([13579][26]))))(((0[13578]|1[02])((0[1-9])|([12][0-9])|(3[01])))|(((0[469])|11)((0[1-9])|([12][1-9])|30))|(02((0[1-9])|(1[0-9])|(2[1-9])))))'  """ + column+ ' from ' + str(db) + '.' + str(table) + ') a  where a.' + str(column) + '=false'
+    file_name= "南通市社会治理现代化指挥中心数据资源库建设_技术规则_ljb.xlsx"
+    if os.path.exists(file_name):
+        os.remove(file_name)
+    df.to_excel(file_name,sheet_name='时间格式检测',index=False,header=True)
+def lat_lng_check(path):
+    df= pd.read_excel(path,sheet_name='经纬度')
+    print(df.loc[0,'指标分类*'])
+    for idx in df.index:
+        db = df.loc[idx,'数据库名*']
+        table = df.loc[idx,'表名*']
+        column = df.loc[idx,'字段名称*']
+        if df.loc[idx,'指标分类*']=='有效检查性':
+            df.loc[idx,'文本错误条件'] = r'''select * from (select *,translate(JD,"\.",'') regexp '^[0-9]*$' ''' + column+ ''' from ''' + db + '''.''' + table + ''') a where a.''' + column+ '''=false'''
+            df.loc[idx,'全量SQL'] = 'select count(1) from '+db+'.'+table
+            df.loc[idx,'错误SQL'] =r'''select * from (select *,translate(JD,"\.",'') regexp '^[0-9]*$' ''' + column+ ''' from ''' + db + '''.''' + table + ''') a where a.''' + column+ '''=false'''
+    file_name= "南通市社会治理现代化指挥中心数据资源库建设_技术规则_ljb_经纬度.xlsx"
+    if os.path.exists(file_name):
+        os.remove(file_name)
+    df.to_excel(file_name,sheet_name='时间格式检测',index=False,header=True)
 
 if __name__ == '__main__':
     path = r"C:\Users\35807\Desktop"
-    file ='result-0713.xlsx'
+    file ='技术规则jb(1).xlsx'
     pathfile = os.path.join(path,file)
     print(pathfile)
-    PhoneSubstr2(pathfile)
+    lat_lng_check(pathfile)
 
 
