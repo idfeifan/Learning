@@ -169,5 +169,3 @@ if __name__ == '__main__':
     pathfile = os.path.join(path,file)
     print(pathfile)
     lat_lng_check(pathfile)
-
-
