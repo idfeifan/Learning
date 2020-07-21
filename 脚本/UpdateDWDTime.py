@@ -18,7 +18,7 @@ def copyFile(dr = r'C:\Users\35807\Desktop\脚本'):
     for idx in df.index:
         res = df.loc[idx,'table'].strip() in list
         if res == True:
-            source = os.path.join(r"C:\Users\35807\Desktop\脚本",df.loc[idx,'table'].strip()+type)
+            source = os.path.join(r"C:\Users\35807\Desktop\脚本",df.loc[idx,'table'].strip() + type)
             shutil.copy(source, r'C:\Users\35807\Desktop\bak')
 
 def modifyfile(dr= r'C:\Users\35807\Desktop\bak'):
