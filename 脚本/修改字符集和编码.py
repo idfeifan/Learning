@@ -2,9 +2,8 @@
 import os
 import chardet
 '''
-@Time : 2019/12/2 11:22
-# @Author : way
-# @Site :
+@Time : 2020/7/18 14:28
+# @Author : liufeifan
 # @Describe: 检查 脚本文件 转换格式为 LF , utf-8
 '''
 def turn(file):
@@ -22,7 +21,7 @@ def turn(file):
                 f.write(data_str)  #替换为unix 格式，并且转换格式为utf-8
             print(f"{file}: ({tp},{encoding}) trun to (LF,utf-8) success!")
 if __name__ == "__main__":
-    dr = r'D:\SVN\产品线\数据治理\南通市社会治理现代化指挥中心数据资源库建设项目\项目实施资料\hive开发\临时存储\20200701'
+    dr = r'C:\Users\35807\Desktop\bak'
     #root 表示上级目录， dirs，files内在文件和目录的列表，如果目录下文件为空，则files为空列表
     for root,dirs,files in os.walk(dr):
         #遍历文件
